@@ -18,13 +18,14 @@
  *
  ****************************************************************************/
 
-#ifndef __BOARDS_ARM_IMXRT_TEENSY_4X_SRC_TEENSY_4_H
-#  define __BOARDS_ARM_IMXRT_TEENSY_4X_SRC_TEENSY_4_H
+#ifndef __SRC_TEENSY_4_H
+#  define __SRC_TEENSY_4_H
 
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
+#  include <px4_platform_common/px4_config.h>
 #  include <nuttx/config.h>
 
 #  include <stdint.h>
@@ -127,6 +128,102 @@
 #define GPIO_OUT1      (GPIO_OUTPUT | GPIO_OUTPUT_ZERO | IOMUX_GOUT_DEFAULT | \
                         GPIO_PORT4 | GPIO_PIN5)                 /* EMC_05 */
 
+/* ADC */
+
+#define ADC_IOMUX (IOMUX_CMOS_INPUT | IOMUX_PULL_NONE | IOMUX_DRIVE_HIZ)
+
+#define ADC1_CH(n)                  (n)
+#define ADC1_GPIO(n, p)             (GPIO_PORT1 | GPIO_PIN##p | ADC_IOMUX) //
+
+/* Define GPIO pins used as ADC N.B. Channel numbers are for reference, */
+
+#define PX4_ADC_GPIO  \
+	/* BATTERY1_VOLTAGE       GPIO_AD_B1_11 GPIO1 Pin 27 */  ADC1_GPIO(0,  27),  \
+	/* BATTERY1_CURRENT       GPIO_AD_B0_12 GPIO1 Pin 12 */  ADC1_GPIO(1,  12),  \
+	/* BATTERY2_VOLTAGE       GPIO_AD_B0_13 GPIO1 Pin 13 */  ADC1_GPIO(2,  13),  \
+	/* BATTERY2_CURRENT       GPIO_AD_B0_14 GPIO1 Pin 14 */  ADC1_GPIO(3,  14),  \
+	/* SPARE_2_CHANNEL        GPIO_AD_B0_15 GPIO1 Pin 15 */  ADC1_GPIO(4,  15),  \
+	/* HW_VER_SENSE           GPIO_AD_B1_04 GPIO1 Pin 20 */  ADC1_GPIO(9,  20),  \
+	/* SCALED_V5              GPIO_AD_B1_05 GPIO1 Pin 21 */  ADC1_GPIO(10, 21), \
+	/* SCALED_VDD_3V3_SENSORS GPIO_AD_B1_06 GPIO1 Pin 22 */  ADC1_GPIO(11, 22), \
+	/* HW_REV_SENSE           GPIO_AD_B1_08 GPIO1 Pin 24 */  ADC1_GPIO(13, 24), \
+	/* SPARE_1                GPIO_AD_B1_09 GPIO1 Pin 25 */  ADC1_GPIO(14, 25), \
+	/* RSSI_IN                GPIO_AD_B1_10 GPIO1 Pin 26 */  ADC1_GPIO(15, 26)
+
+/* Define Channel numbers must match above GPIO pin IN(n)*/
+
+#define ADC_BATTERY1_VOLTAGE_CHANNEL        /* GPIO_AD_B1_11 GPIO1 Pin 27 */  ADC1_CH(0)
+#define ADC_BATTERY1_CURRENT_CHANNEL        /* GPIO_AD_B0_12 GPIO1 Pin 12 */  ADC1_CH(1)
+#define ADC_BATTERY2_VOLTAGE_CHANNEL        /* GPIO_AD_B0_13 GPIO1 Pin 13 */  ADC1_CH(2)
+#define ADC_BATTERY2_CURRENT_CHANNEL        /* GPIO_AD_B0_14 GPIO1 Pin 14 */  ADC1_CH(3)
+#define ADC1_SPARE_2_CHANNEL                /* GPIO_AD_B0_15 GPIO1 Pin 15 */  ADC1_CH(4)
+#define ADC_HW_VER_SENSE_CHANNEL            /* GPIO_AD_B1_04 GPIO1 Pin 20 */  ADC1_CH(9)
+#define ADC_SCALED_V5_CHANNEL               /* GPIO_AD_B1_05 GPIO1 Pin 21 */  ADC1_CH(10)
+#define ADC_SCALED_VDD_3V3_SENSORS_CHANNEL  /* GPIO_AD_B1_06 GPIO1 Pin 22 */  ADC1_CH(11)
+#define ADC_HW_REV_SENSE_CHANNEL            /* GPIO_AD_B1_08 GPIO1 Pin 24 */  ADC1_CH(13)
+#define ADC1_SPARE_1_CHANNEL                /* GPIO_AD_B1_09 GPIO1 Pin 25 */  ADC1_CH(14)
+#define ADC_RSSI_IN_CHANNEL                 /* GPIO_AD_B1_10 GPIO1 Pin 26 */  ADC1_CH(15)
+
+#define ADC_CHANNELS \
+	((1 << ADC_BATTERY1_VOLTAGE_CHANNEL)       | \
+	 (1 << ADC_BATTERY1_CURRENT_CHANNEL)       | \
+	 (1 << ADC_BATTERY2_VOLTAGE_CHANNEL)       | \
+	 (1 << ADC_BATTERY2_CURRENT_CHANNEL)       | \
+	 (1 << ADC1_SPARE_2_CHANNEL)               | \
+	 (1 << ADC_RSSI_IN_CHANNEL)                | \
+	 (1 << ADC_SCALED_V5_CHANNEL)              | \
+	 (1 << ADC_SCALED_VDD_3V3_SENSORS_CHANNEL) | \
+	 (1 << ADC_HW_VER_SENSE_CHANNEL)           | \
+	 (1 << ADC_HW_REV_SENSE_CHANNEL)           | \
+	 (1 << ADC1_SPARE_1_CHANNEL))
+
+/* HW has to large of R termination on ADC todo:change when HW value is chosen */
+
+#define BOARD_ADC_OPEN_CIRCUIT_V     (5.6f)
+
+/* HW Version and Revision drive signals Default to 1 to detect */
+
+#define BOARD_HAS_HW_VERSIONING
+
+#define HW_IOMUX (IOMUX_CMOS_OUTPUT | IOMUX_PULL_NONE | IOMUX_DRIVE_33OHM | IOMUX_SPEED_MAX | IOMUX_SLEW_FAST)
+
+#define GPIO_HW_VER_REV_DRIVE /* GPIO_AD_B0_01 GPIO1_IO01   */  (GPIO_PORT1 | GPIO_PIN1 | GPIO_OUTPUT | GPIO_OUTPUT_ONE | HW_IOMUX)
+#define GPIO_HW_REV_SENSE     /* GPIO_AD_B1_08 GPIO1 Pin 24 */  ADC1_GPIO(13, 24)
+#define GPIO_HW_VER_SENSE     /* GPIO_AD_B1_04 GPIO1 Pin 20 */  ADC1_GPIO(9,  20)
+#define HW_INFO_INIT_PREFIX   "V5"
+#define V500   HW_VER_REV(0x0,0x0) // FMUV5,                    Rev 0
+#define V540   HW_VER_REV(0x4,0x0) // mini no can 2,3,          Rev 0
+
+/* PWM Capture
+ *
+ * 2  PWM Capture inputs are supported
+ */
+#define DIRECT_PWM_CAPTURE_CHANNELS  2
+#define CAP_IOMUX (IOMUX_CMOS_OUTPUT | IOMUX_PULL_NONE | IOMUX_DRIVE_50OHM | IOMUX_SPEED_MEDIUM | IOMUX_SLEW_FAST)
+#define PIN_FLEXPWM2_PWMB0  /* P2:7  PWM2 B0 FMU_CAP1 */ (CAP_IOMUX | GPIO_FLEXPWM2_PWMB00_2)
+#define PIN_FLEXPWM2_PWMB3  /* P3:3  PWM2 A1 FMU_CAP2 */ (CAP_IOMUX | GPIO_FLEXPWM2_PWMB03_3)
+
+#define nARMED_INPUT_IOMUX  (IOMUX_CMOS_INPUT |  IOMUX_PULL_UP_22K | IOMUX_DRIVE_HIZ)
+#define nARMED_OUTPUT_IOMUX (IOMUX_CMOS_OUTPUT | IOMUX_PULL_KEEP | IOMUX_DRIVE_33OHM  | IOMUX_SPEED_MEDIUM | IOMUX_SLEW_FAST)
+
+#define GPIO_nARMED_INIT     /* GPIO_SD_B1_01 GPIO3_IO1 */ (GPIO_PORT3 | GPIO_PIN1 | GPIO_INPUT | nARMED_INPUT_IOMUX)
+#define GPIO_nARMED          /* GPIO_SD_B1_01 GPIO3_IO1 */ (GPIO_PORT3 | GPIO_PIN1 | GPIO_OUTPUT | GPIO_OUTPUT_ZERO | nARMED_OUTPUT_IOMUX)
+
+#define BOARD_INDICATE_EXTERNAL_LOCKOUT_STATE(enabled)  px4_arch_configgpio((enabled) ? GPIO_nARMED : GPIO_nARMED_INIT)
+#define BOARD_GET_EXTERNAL_LOCKOUT_STATE() px4_arch_gpioread(GPIO_nARMED)
+
+/* PWM
+ */
+
+#define DIRECT_PWM_OUTPUT_CHANNELS  8
+
+// Input Capture not supported on MVP
+
+#define BOARD_HAS_NO_CAPTURE
+
+#define BOARD_NUMBER_BRICKS             0
+#define BOARD_ENABLE_CONSOLE_BUFFER
+
 /****************************************************************************
  * Public Types
  ****************************************************************************/
@@ -167,9 +264,9 @@ void imxrt_spidev_initialize(void);
  *
  ****************************************************************************/
 
-#ifdef CONFIG_IMXRT_FLEXCAN
+// #ifdef CONFIG_IMXRT_FLEXCAN
 int imxrt_can_setup(void);
-#endif
+// #endif
 
 /****************************************************************************
  * Name: imxrt_pwm_setup
@@ -179,9 +276,9 @@ int imxrt_can_setup(void);
  *
  ****************************************************************************/
 
-#ifdef CONFIG_IMXRT_FLEXPWM
+// #ifdef CONFIG_IMXRT_FLEXPWM
 int imxrt_pwm_setup(void);
-#endif
+// #endif
 
 /****************************************************************************
  * Name: imxrt_adc_initialize
@@ -191,9 +288,9 @@ int imxrt_pwm_setup(void);
  *
  ****************************************************************************/
 
-#ifdef CONFIG_IMXRT_ADC
+// #ifdef CONFIG_IMXRT_ADC
 int imxrt_adc_initialize(void);
-#endif
+// #endif
 
 /****************************************************************************
  * Name: imxrt_gpio_initialize
@@ -206,9 +303,9 @@ int imxrt_adc_initialize(void);
  *
  ****************************************************************************/
 
-#ifdef CONFIG_DEV_GPIO
+// #ifdef CONFIG_DEV_GPIO
 int imxrt_gpio_initialize(void);
-#endif
+// #endif
 
 /****************************************************************************
  * Name: imxrt_enc_initialize
@@ -218,9 +315,9 @@ int imxrt_gpio_initialize(void);
  *
  ****************************************************************************/
 
-#ifdef CONFIG_IMXRT_ENC
+// #ifdef CONFIG_IMXRT_ENC
 int imxrt_enc_initialize(void);
-#endif
+// #endif
 
 /****************************************************************************
  * Name: imxrt_i2c_setup
@@ -230,9 +327,9 @@ int imxrt_enc_initialize(void);
  *
  ****************************************************************************/
 
-#ifdef CONFIG_IMXRT_LPI2C
+// #ifdef CONFIG_IMXRT_LPI2C
 void imxrt_i2c_setup(void);
-#endif
+// #endif
 
 /****************************************************************************
  * Name: imxrt_autoled_initialize
@@ -248,9 +345,11 @@ void imxrt_i2c_setup(void);
  *
  ****************************************************************************/
 
-#ifdef CONFIG_ARCH_LEDS
+// #ifdef CONFIG_ARCH_LEDS
 void imxrt_autoled_initialize(void);
-#endif
+// #endif
+
+#  include <px4_platform_common/board_common.h>
 
 #endif  /* __ASSEMBLY__ */
-#endif  /* __BOARDS_ARM_TEENSY_4X_SRC_TEENSY_4_H */
+#endif  /* __SRC_TEENSY_4_H */

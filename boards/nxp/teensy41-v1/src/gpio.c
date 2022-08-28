@@ -36,7 +36,7 @@
 
 #include "chip.h"
 #include "imxrt_gpio.h"
-#include "teensy-4.h"
+#include "board_config.h"
 
 #if defined(CONFIG_DEV_GPIO) && !defined(CONFIG_GPIO_LOWER_HALF)
 

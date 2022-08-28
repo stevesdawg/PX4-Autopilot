@@ -65,7 +65,7 @@
 #include "imxrt_gpio.h"
 #include "imxrt_iomuxc.h"
 #include <arch/board/board.h>
-#include "teensy-4.h"
+#include "board_config.h"
 
 #ifdef CONFIG_ARCH_LEDS
 

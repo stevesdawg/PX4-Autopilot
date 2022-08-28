@@ -49,7 +49,7 @@
 #endif
 
 #include "imxrt_enet.h"
-#include "teensy-4.h"
+#include "board_config.h"
 
 #include <arch/board/board.h>   /* Must always be included last */
 
@@ -69,7 +69,6 @@
  * Private Functions
  ****************************************************************************/
 
-#if defined (CONFIG_IMXRT_USDHC) && (CONFIG_TEENSY_41) 
 static int nsh_sdmmc_initialize(void)
 {
   struct sdio_dev_s *sdmmc;
@@ -99,9 +98,6 @@ static int nsh_sdmmc_initialize(void)
 
   return OK;
 }
-#else
-#  define nsh_sdmmc_initialize() (OK)
-#endif
 
 /****************************************************************************
  * Public Functions

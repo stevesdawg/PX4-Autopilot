@@ -1,5 +1,5 @@
 /****************************************************************************
- * boards/arm/imxrt/teensy-4.x/src/imxrt_flexcan.c
+ * boards/arm/imxrt/teensy-4.x/src/imxrt_userleds.c
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -18,69 +18,65 @@
  *
  ****************************************************************************/
 
+/* There are two LED status indicators located on Teensy-4.x Board.  The
+ * functions of these LEDs include:
+ *
+  *   - RED LED (loading status)
+ *      - dim:    ready
+ *      - bright: writing
+ *      - blink:  no USB
+ *   - USER LED (D3)
+ *
+ * Only a single LED, D3, is under software control.
+ */
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
 
 #include <nuttx/config.h>
 
-#include <stdbool.h>
-#include <errno.h>
-#include <debug.h>
+#include "imxrt_gpio.h"
+#include "imxrt_iomuxc.h"
+#include <arch/board/board.h>
+#include "board_config.h"
 
-#include <nuttx/can/can.h>
-
-#include "imxrt_flexcan.h"
-#include "teensy-4.h"
-
-#if defined(CONFIG_IMXRT_FLEXCAN) && defined(CONFIG_NETDEV_LATEINIT)
+#ifndef CONFIG_ARCH_LEDS
 
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
 
 /****************************************************************************
- * Name: imxrt_can_setup
- *
- * Description:
- *  Initialize CAN and register the CAN device
- *
+ * Name: board_userled_initialize
  ****************************************************************************/
 
-int imxrt_can_setup(void)
+uint32_t board_userled_initialize(void)
 {
-  int ret;
-#ifdef CONFIG_IMXRT_FLEXCAN1
-  /* Call arm_caninitialize() to get an instance of the CAN interface */
+  /* Configure LED GPIO for output */
 
-  ret = imxrt_caninitialize(1);
-  if (ret < 0)
-    {
-      canerr("ERROR: Failed to get CAN interface\n");
-      return -ENODEV;
-    }
-
-#endif
-#ifdef CONFIG_IMXRT_FLEXCAN2
-  ret = imxrt_caninitialize(2);
-  if (ret < 0)
-    {
-      canerr("ERROR: Failed to get CAN interface\n");
-      return -ENODEV;
-    }
-
-#endif
-#ifdef CONFIG_IMXRT_FLEXCAN3
-  ret = imxrt_caninitialize(3);
-  if (ret < 0)
-    {
-      canerr("ERROR: Failed to get CAN interface\n");
-      return -ENODEV;
-    }
-
-#endif
-  UNUSED(ret);
-  return OK;
+  imxrt_config_gpio(GPIO_LED);
+  return BOARD_NLEDS;
 }
 
-#endif /* CONFIG_IMXRT_FLEXCAN */
+/****************************************************************************
+ * Name: board_userled
+ ****************************************************************************/
+
+void board_userled(int led, bool ledon)
+{
+  imxrt_gpio_write(GPIO_LED, !ledon);   /* Low illuminates */
+}
+
+/****************************************************************************
+ * Name: board_userled_all
+ ****************************************************************************/
+
+void board_userled_all(uint32_t ledset)
+{
+  /* Low illuminates */
+
+  imxrt_gpio_write(GPIO_LED, (ledset & BOARD_USERLED_BIT) == 0);
+}
+
+#endif                                 /* !CONFIG_ARCH_LEDS */

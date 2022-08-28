@@ -32,6 +32,8 @@
  ****************************************************************************/
 
 /* FLEXSPI memory config block related definitions */
+#define CONFIG_TEENSY4_QSPI_FLASH 1
+#define CONFIG_TEENSY_41 1
 
 #  define FLEXSPI_CFG_BLK_TAG         (0x42464346ul)
 #  define FLEXSPI_CFG_BLK_VERSION     (0x56010100ul)

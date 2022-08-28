@@ -36,7 +36,7 @@
 
 #include "imxrt_lpspi.h"
 #include "imxrt_gpio.h"
-#include "teensy-4.h"
+#include "board_config.h"
 
 #if defined(CONFIG_IMXRT_LPSPI1) || defined(CONFIG_IMXRT_LPSPI2) || \
     defined(CONFIG_IMXRT_LPSPI3) || defined(CONFIG_IMXRT_LPSPI4)
@@ -61,7 +61,7 @@ void weak_function imxrt_spidev_initialize(void)
 #endif
 #ifdef CONFIG_IMXRT_LPSPI4
   imxrt_config_gpio(GPIO_LPSPI4_CS); /* LPSPI4 chip select */
-  imxrt_config_gpio(GPIO_LCD_CD);
+//   imxrt_config_gpio(GPIO_LCD_CD);
 #endif
 }
 

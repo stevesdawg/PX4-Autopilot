@@ -28,7 +28,7 @@
 #include <arch/board/board.h>
 
 #include "imxrt_start.h"
-#include "teensy-4.h"
+#include "board_config.h"
 #include "arm_arch.h"
 #include "imxrt_flexspi_nor_boot.h"
 

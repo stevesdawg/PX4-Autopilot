@@ -35,7 +35,7 @@
 #include "arm_arch.h"
 
 #include "imxrt_adc.h"
-#include "teensy-4.h"
+#include "board_config.h"
 
 #ifdef CONFIG_IMXRT_ADC
 

@@ -34,7 +34,7 @@
 #include <arch/board/board.h>
 
 #include "imxrt_flexpwm.h"
-#include "teensy-4.h"
+#include "board_config.h"
 
 /****************************************************************************
  * Pre-processor Definitions

@@ -29,7 +29,7 @@
 
 #include <nuttx/board.h>
 
-#include "teensy-4.h"
+#include "board_config.h"
 
 #if !defined(CONFIG_ARCH_LEDS) && defined(CONFIG_USERLED_LOWER)
 #  define HAVE_LEDS 0

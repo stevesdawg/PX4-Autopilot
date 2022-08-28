@@ -34,7 +34,7 @@
 
 #include "imxrt_enc.h"
 #include "imxrt_xbar.h"
-#include "teensy-4.h"
+#include "board_config.h"
 
 #if defined(CONFIG_IMXRT_ENC) && defined(CONFIG_SENSORS_QENCODER)
 

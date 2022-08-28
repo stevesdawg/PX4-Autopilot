@@ -45,7 +45,7 @@
 #include "imxrt_gpio.h"
 #include "imxrt_enet.h"
 
-#include "teensy-4.h"
+#include "board_config.h"
 
 #if defined (CONFIG_IMXRT_ENET) && (CONFIG_TEENSY_41)
 

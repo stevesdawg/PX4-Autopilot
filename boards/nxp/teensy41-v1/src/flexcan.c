@@ -1,5 +1,5 @@
 /****************************************************************************
- * boards/arm/imxrt/teensy-4.x/src/imxrt_i2c.c
+ * boards/arm/imxrt/teensy-4.x/src/imxrt_flexcan.c
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -28,89 +28,59 @@
 #include <errno.h>
 #include <debug.h>
 
-#include <nuttx/i2c/i2c_master.h>
-#include <nuttx/sensors/bmp280.h>
-#include <imxrt_lpi2c.h>
+#include <nuttx/can/can.h>
 
-#include "teensy-4.h"
+#include "imxrt_flexcan.h"
+#include "board_config.h"
 
-#ifdef CONFIG_IMXRT_LPI2C
-
-#define BMP280_LPI2C 3
+#if defined(CONFIG_IMXRT_FLEXCAN) && defined(CONFIG_NETDEV_LATEINIT)
 
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
 
 /****************************************************************************
- * Name: imxrt_i2c_register
+ * Name: imxrt_can_setup
  *
  * Description:
- *  Register I2C driver
+ *  Initialize CAN and register the CAN device
  *
  ****************************************************************************/
 
-#ifdef CONFIG_I2C_DRIVER
-static void imxrt_i2c_register(int bus)
+int imxrt_can_setup(void)
 {
-  FAR struct i2c_master_s *i2c;
   int ret;
+#ifdef CONFIG_IMXRT_FLEXCAN1
+  /* Call arm_caninitialize() to get an instance of the CAN interface */
 
-  i2c = imxrt_i2cbus_initialize(bus);
-  if (i2c == NULL)
+  ret = imxrt_caninitialize(1);
+  if (ret < 0)
     {
-      serr("ERROR: Failed to get I2C%d interface\n", bus);
-    }
-  else
-    {
-      ret = i2c_register(i2c, bus);
-      if (ret < 0)
-        {
-          serr("ERROR: Failed to register I2C%d driver: %d\n", bus, ret);
-          imxrt_i2cbus_uninitialize(i2c);
-        }
+      canerr("ERROR: Failed to get CAN interface\n");
+      return -ENODEV;
     }
 
-  #ifdef SENSORS_BMP280
-  if (BMP280_LPI2C == bus)
+#endif
+#ifdef CONFIG_IMXRT_FLEXCAN2
+  ret = imxrt_caninitialize(2);
+  if (ret < 0)
     {
-      /* Register the BMP280 driver */
-
-      ret = bmp280_register(0, i2c);
-      if (ret < 0)
-        {
-          serr("ERROR: Failed to register BMP280\n");
-        }
+      canerr("ERROR: Failed to get CAN interface\n");
+      return -ENODEV;
     }
-  #endif
-}
-#endif
 
-/****************************************************************************
- * Name: imxrt_i2c_setup
- *
- * Description:
- *  Choose which I2C driver should be initialize
- *
- ****************************************************************************/
-
-void imxrt_i2c_setup()
-{
-#if defined(CONFIG_I2C_DRIVER) && defined(CONFIG_IMXRT_LPI2C1)
-  imxrt_i2c_register(1);
 #endif
+#ifdef CONFIG_IMXRT_FLEXCAN3
+  ret = imxrt_caninitialize(3);
+  if (ret < 0)
+    {
+      canerr("ERROR: Failed to get CAN interface\n");
+      return -ENODEV;
+    }
 
-#if defined(CONFIG_I2C_DRIVER) && defined(CONFIG_IMXRT_LPI2C2)
-  serr("ERROR: LPI2C2 is not on Teensy-4.x board\n");
 #endif
-
-#if defined(CONFIG_I2C_DRIVER) && defined(CONFIG_IMXRT_LPI2C3)
-  imxrt_i2c_register(3);
-#endif
-
-#if defined(CONFIG_I2C_DRIVER) && defined(CONFIG_IMXRT_LPI2C4)
-  imxrt_i2c_register(4);
-#endif
+  UNUSED(ret);
+  return OK;
 }
 
-#endif /* CONFIG_IMXRT_LPI2C */
+#endif /* CONFIG_IMXRT_FLEXCAN */
