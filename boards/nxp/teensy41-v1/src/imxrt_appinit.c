@@ -49,28 +49,28 @@
  * Public Functions
  ****************************************************************************/
 
-__EXPORT void imxrt_boardinitialize(void)
-{
+// __EXPORT void imxrt_boardinitialize(void)
+// {
 
-	board_on_reset(-1); /* Reset PWM first thing */
+// 	board_on_reset(-1); /* Reset PWM first thing */
 
-	/* configure LEDs */
+// 	/* configure LEDs */
 
-	board_autoled_initialize();
+// 	board_autoled_initialize();
 
-	/* configure pins */
+// 	/* configure pins */
 
-	const uint32_t gpio[] = PX4_GPIO_INIT_LIST;
-	px4_gpio_init(gpio, arraySize(gpio));
+// 	const uint32_t gpio[] = PX4_GPIO_INIT_LIST;
+// 	px4_gpio_init(gpio, arraySize(gpio));
 
-	/* configure SPI interfaces */
+// 	/* configure SPI interfaces */
 
-	imxrt_spidev_initialize();
+// 	imxrt_spidev_initialize();
 
-	// imxrt_usb_initialize();
+// 	// imxrt_usb_initialize();
 
-	teensy41_timer_initialize();
-}
+// 	teensy41_timer_initialize();
+// }
 
 /****************************************************************************
  * Name: board_app_initialize
