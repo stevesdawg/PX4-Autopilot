@@ -28,8 +28,16 @@
 #include <syslog.h>
 
 #include <nuttx/board.h>
+#include <nuttx/board.h>
+#include <nuttx/spi/spi.h>
+#include <nuttx/i2c/i2c_master.h>
+#include <nuttx/sdio.h>
+#include <nuttx/mmcsd.h>
+#include <nuttx/analog/adc.h>
 
 #include "board_config.h"
+
+#include <drivers/drv_hrt.h>
 
 #if !defined(CONFIG_ARCH_LEDS) && defined(CONFIG_USERLED_LOWER)
 #  define HAVE_LEDS 0
@@ -40,6 +48,29 @@
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
+
+__EXPORT void imxrt_boardinitialize(void)
+{
+
+	board_on_reset(-1); /* Reset PWM first thing */
+
+	/* configure LEDs */
+
+	board_autoled_initialize();
+
+	/* configure pins */
+
+	const uint32_t gpio[] = PX4_GPIO_INIT_LIST;
+	px4_gpio_init(gpio, arraySize(gpio));
+
+	/* configure SPI interfaces */
+
+	imxrt_spidev_initialize();
+
+	// imxrt_usb_initialize();
+
+	teensy41_timer_initialize();
+}
 
 /****************************************************************************
  * Name: board_app_initialize

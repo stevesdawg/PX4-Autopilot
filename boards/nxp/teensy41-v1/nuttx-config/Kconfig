@@ -5,7 +5,7 @@
 
 choice
 	prompt "Boot Flash"
-	default NXP_TEENSY41_V3_HYPER_FLASH
+	default NXP_TEENSY41_V3_QSPI_FLASH
 
 config NXP_TEENSY41_V3_HYPER_FLASH
 	bool "HYPER Flash"
