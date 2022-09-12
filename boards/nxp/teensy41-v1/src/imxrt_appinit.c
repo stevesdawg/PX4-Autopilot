@@ -22,11 +22,12 @@
  * Included Files
  ****************************************************************************/
 
-#include <nuttx/config.h>
+#include "board_config.h"
 
 #include <sys/types.h>
 #include <syslog.h>
 
+#include <nuttx/config.h>
 #include <nuttx/board.h>
 #include <nuttx/board.h>
 #include <nuttx/spi/spi.h>
@@ -35,9 +36,8 @@
 #include <nuttx/mmcsd.h>
 #include <nuttx/analog/adc.h>
 
-#include "board_config.h"
-
 #include <drivers/drv_hrt.h>
+#include <px4_arch/io_timer.h>
 
 #if !defined(CONFIG_ARCH_LEDS) && defined(CONFIG_USERLED_LOWER)
 #  define HAVE_LEDS 0

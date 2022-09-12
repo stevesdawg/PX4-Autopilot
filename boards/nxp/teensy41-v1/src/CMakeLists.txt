@@ -6,13 +6,13 @@ px4_add_library(drivers_board
 	flexcan.c
 	flexpwm.c
 	gpio.c
-	i2c.c
+	i2c.cpp
 	imxrt_appinit.c
 	imxrt_boot.c
 	imxrt_bringup.c
 	imxrt_flexspi_nor_boot.c
 	imxrt_flexspi_nor_flash.c
-	spi.c
+	spi.cpp
 	timer_config.cpp
 	userleds.c
 )
