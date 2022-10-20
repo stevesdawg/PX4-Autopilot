@@ -127,6 +127,9 @@
 #define IMXRT_LPI2C_CLK_SELECT     CCM_CSCDR2_LPI2C_CLK_SEL_PLL3_60M
 #define IMXRT_LSI2C_PODF_DIVIDER   5
 
+#define IMXRT_USDHC1_CLK_SELECT    CCM_CSCMR1_USDHC1_CLK_SEL_PLL2_PFD0
+#define IMXRT_USDHC1_PODF_DIVIDER  2
+
 #define IMXRT_CAN_CLK_SELECT       CCM_CSCMR2_CAN_CLK_SEL_PLL3_SW_80
 #define IMXRT_CAN_PODF_DIVIDER     1
 
@@ -146,6 +149,37 @@
 #  define IMXRT_TRACE_PODF_DIVIDER 1
 #  define IMXRT_TRACE_CLK_SELECT   CCM_CBCMR_TRACE_CLK_SEL_PLL2_PFD0
 #endif
+
+/* SDIO *********************************************************************/
+
+/* Pin drive characteristics - drive strength in particular may need tuning
+ * for specific boards, but has been checked by scope on the EVKB to make
+ * sure shapes are square with minimal ringing.
+ */
+
+#define PIN_USDHC1_D0     (GPIO_USDHC1_DATA0_1 | IOMUX_USDHC1_DATAX_DEFAULT)
+#define PIN_USDHC1_D1     (GPIO_USDHC1_DATA1_1 | IOMUX_USDHC1_DATAX_DEFAULT)
+#define PIN_USDHC1_D2     (GPIO_USDHC1_DATA3_1 | IOMUX_USDHC1_DATAX_DEFAULT)
+#define PIN_USDHC1_D3     (GPIO_USDHC1_DATA2_1 | IOMUX_USDHC1_DATAX_DEFAULT)
+#define PIN_USDHC1_DCLK   (GPIO_USDHC1_CLK_1   | IOMUX_USDHC1_CLK_DEFAULT)
+#define PIN_USDHC1_CMD    (GPIO_USDHC1_CMD_1   | IOMUX_USDHC1_CMD_DEFAULT)
+#define PIN_USDHC1_CD     (PIN_USDHC1_D3)
+
+/* 386 KHz for initial inquiry stuff */
+
+#define BOARD_USDHC_IDMODE_PRESCALER    USDHC_SYSCTL_SDCLKFS_DIV256
+#define BOARD_USDHC_IDMODE_DIVISOR      USDHC_SYSCTL_DVS_DIV(2)
+
+/* 24.8MHz for other modes */
+
+#define BOARD_USDHC_MMCMODE_PRESCALER   USDHC_SYSCTL_SDCLKFS_DIV8
+#define BOARD_USDHC_MMCMODE_DIVISOR     USDHC_SYSCTL_DVS_DIV(1)
+
+#define BOARD_USDHC_SD1MODE_PRESCALER   USDHC_SYSCTL_SDCLKFS_DIV8
+#define BOARD_USDHC_SD1MODE_DIVISOR     USDHC_SYSCTL_DVS_DIV(1)
+
+#define BOARD_USDHC_SD4MODE_PRESCALER   USDHC_SYSCTL_SDCLKFS_DIV8
+#define BOARD_USDHC_SD4MODE_DIVISOR     USDHC_SYSCTL_DVS_DIV(1)
 
 /* LED definitions **********************************************************/
 
@@ -203,37 +237,6 @@
  * apparently, running normally.  If the LED is flashing at approximately
  * 2Hz, then a fatal error has been detected and the system has halted.
  */
-
-/* SDIO *********************************************************************/
-
-/* Pin drive characteristics - drive strength in particular may need tuning
- * for specific boards, but has been checked by scope on the EVKB to make
- * sure shapes are square with minimal ringing.
- */
-
-#define PIN_USDHC1_D0     (GPIO_USDHC1_DATA0_1 | IOMUX_USDHC1_DATAX_DEFAULT)
-#define PIN_USDHC1_D1     (GPIO_USDHC1_DATA1_1 | IOMUX_USDHC1_DATAX_DEFAULT)
-#define PIN_USDHC1_D2     (GPIO_USDHC1_DATA3_1 | IOMUX_USDHC1_DATAX_DEFAULT)
-#define PIN_USDHC1_D3     (GPIO_USDHC1_DATA2_1 | IOMUX_USDHC1_DATAX_DEFAULT)
-#define PIN_USDHC1_DCLK   (GPIO_USDHC1_CLK_1   | IOMUX_USDHC1_CLK_DEFAULT)
-#define PIN_USDHC1_CMD    (GPIO_USDHC1_CMD_1   | IOMUX_USDHC1_CMD_DEFAULT)
-#define PIN_USDHC1_CD     (PIN_USDHC1_D3)
-
-/* 386 KHz for initial inquiry stuff */
-
-#define BOARD_USDHC_IDMODE_PRESCALER    USDHC_SYSCTL_SDCLKFS_DIV256
-#define BOARD_USDHC_IDMODE_DIVISOR      USDHC_SYSCTL_DVS_DIV(2)
-
-/* 24.8MHz for other modes */
-
-#define BOARD_USDHC_MMCMODE_PRESCALER   USDHC_SYSCTL_SDCLKFS_DIV8
-#define BOARD_USDHC_MMCMODE_DIVISOR     USDHC_SYSCTL_DVS_DIV(1)
-
-#define BOARD_USDHC_SD1MODE_PRESCALER   USDHC_SYSCTL_SDCLKFS_DIV8
-#define BOARD_USDHC_SD1MODE_DIVISOR     USDHC_SYSCTL_DVS_DIV(1)
-
-#define BOARD_USDHC_SD4MODE_PRESCALER   USDHC_SYSCTL_SDCLKFS_DIV8
-#define BOARD_USDHC_SD4MODE_DIVISOR     USDHC_SYSCTL_DVS_DIV(1)
 
 /* ETH Disambiguation *******************************************************/
 

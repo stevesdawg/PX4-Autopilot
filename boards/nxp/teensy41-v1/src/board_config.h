@@ -26,13 +26,15 @@
  ****************************************************************************/
 
 #  include <px4_platform_common/px4_config.h>
-#  include <nuttx/config.h>
 
 #  include <stdint.h>
 #  include <stdbool.h>
 
 #  include <arch/irq.h>
 #  include <nuttx/irq.h>
+#  include <nuttx/config.h>
+#  include <nuttx/compiler.h>
+#  include <arch/board/board.h>
 
 #  include "imxrt_gpio.h"
 #  include "imxrt_iomuxc.h"
@@ -78,11 +80,11 @@
 #  define GPIO_LPSPI4_CS       (GPIO_OUTPUT | GPIO_OUTPUT_ONE | \
                               GPIO_PORT2 | GPIO_PIN0 | IOMUX_LPSPI4_CS)
 
-/* LCD dispay */
-#  define GPIO_LCD_RST        (GPIO_OUTPUT | GPIO_OUTPUT_ONE | \
-                              GPIO_PORT2 | GPIO_PIN18 | IOMUX_LPSPI4_CS)    /* B1_02 */
-#  define GPIO_LCD_CD         (GPIO_OUTPUT | GPIO_OUTPUT_ONE | \
-                              GPIO_PORT2 | GPIO_PIN19 | IOMUX_LPSPI4_CS)    /* B1_03 */
+// /* LCD dispay */
+// #  define GPIO_LCD_RST        (GPIO_OUTPUT | GPIO_OUTPUT_ONE | \
+//                               GPIO_PORT2 | GPIO_PIN18 | IOMUX_LPSPI4_CS)    /* B1_02 */
+// #  define GPIO_LCD_CD         (GPIO_OUTPUT | GPIO_OUTPUT_ONE | \
+//                               GPIO_PORT2 | GPIO_PIN19 | IOMUX_LPSPI4_CS)    /* B1_03 */
 
 /* USB OTG ID Pin： GPIO_AD_B1_02 */
 #define GPIO_USBOTG_ID  (GPIO_USB_OTG1_ID_1 | IOMUX_USBOTG_ID_DEFAULT)      /* AD_B1_02 */

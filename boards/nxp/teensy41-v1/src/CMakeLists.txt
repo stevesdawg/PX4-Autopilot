@@ -20,7 +20,6 @@ px4_add_library(drivers_board
 target_link_libraries(drivers_board
 	PRIVATE
 		arch_board_hw_info
-		arch_io_pins
 		drivers__led # drv_led_start
 		nuttx_arch # sdio
 		nuttx_drivers # sdio
